@@ -3,7 +3,11 @@ page 50105 "Sales Panel"
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Lists;
-
+    SourceTable = "Sales Tree";
+    Editable = true;
+    ModifyAllowed = true;
+    InsertAllowed = false;
+    DeleteAllowed = false;
 
     layout
     {
@@ -18,7 +22,6 @@ page 50105 "Sales Panel"
                     {
                         ApplicationArea = all;
                     }
-
                 }
                 group(QuotesGroup)
                 {
@@ -44,7 +47,7 @@ page 50105 "Sales Panel"
                 group(MemosGroup)
                 {
                     ShowCaption = false;
-                    part(Memos; "Sales Tree Cr. Memo")
+                    part(Memos; "Sales Tree Cr. Memos")
                     {
                         ApplicationArea = all;
                     }
@@ -57,20 +60,23 @@ page 50105 "Sales Panel"
     {
         area(Processing)
         {
-            action(ActionName)
+            action(Update)
             {
-                ApplicationArea = All;
+                ApplicationArea = all;
                 Image = WorkCenterLoad;
-                Caption = 'Load Panel';
+                Caption = 'Update Panel';
 
-                trigger OnAction();
+                trigger OnAction()
                 var
-                    cduFuncs: Codeunit Functions;
+                    UpdatedLbl: Label 'Panel updated';
                 begin
-                    cduFuncs.CreateEntries();
+                    CurrPage.Quotes.Page.LoadQuotes();
+                    CurrPage.Orders.Page.LoadOrders();
+                    CurrPage.Invoices.Page.LoadInvoices();
+                    CurrPage.Memos.Page.LoadMemos();
+                    Message(UpdatedLbl);
                 end;
             }
         }
     }
-
 }

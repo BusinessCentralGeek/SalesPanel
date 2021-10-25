@@ -2,6 +2,7 @@ table 50100 "Sales Tree"
 {
     Caption = 'Sales Tree';
     DataClassification = SystemMetadata;
+    TableType = Temporary;
 
     fields
     {
@@ -10,9 +11,9 @@ table 50100 "Sales Tree"
             Caption = 'Entry No.';
             DataClassification = SystemMetadata;
         }
-        field(2; Level; Integer)
+        field(2; Indentation; Integer)
         {
-            Caption = 'Level';
+            Caption = 'Indentation';
             DataClassification = SystemMetadata;
         }
         field(3; "Document No."; Code[20])

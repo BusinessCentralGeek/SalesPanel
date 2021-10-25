@@ -4,7 +4,7 @@ page 50101 "Sales Tree Orders"
     PageType = ListPart;
     SourceTable = "Sales Tree";
     UsageCategory = Lists;
-    SourceTableView = where("Document Type" = filter(Order));
+    Editable = true;
 
     layout
     {
@@ -12,21 +12,15 @@ page 50101 "Sales Tree Orders"
         {
             repeater(General)
             {
-                IndentationColumn = Indentation;
+                IndentationColumn = Rec.Indentation;
                 ShowAsTree = true;
 
-                field("Entry No."; Rec."Entry No.")
-                {
-                    ToolTip = 'Specifies the value of the Entry No. field.';
-                    ApplicationArea = All;
-                    Visible = false;
-                }
-                field(Level; Rec.Level)
+                field(Level; Rec.Indentation)
                 {
                     ToolTip = 'Specifies the value of the Level field.';
                     ApplicationArea = All;
                     Visible = false;
-                    HideValue = true;
+                    Editable = false;
                 }
                 field("Document No."; Rec."Document No.")
                 {
@@ -34,6 +28,7 @@ page 50101 "Sales Tree Orders"
                     ApplicationArea = All;
                     HideValue = HideValues;
                     StyleExpr = StyleExpr;
+                    Editable = false;
                 }
 
                 field("Sell-to Customer No."; Rec."Sell-to Customer No.")
@@ -42,6 +37,7 @@ page 50101 "Sales Tree Orders"
                     ApplicationArea = All;
                     HideValue = HideValues;
                     StyleExpr = StyleExpr;
+                    Editable = false;
                 }
 
                 field("Date"; Rec."Date")
@@ -49,23 +45,27 @@ page 50101 "Sales Tree Orders"
                     ToolTip = 'Specifies the value of the Date field.';
                     ApplicationArea = All;
                     StyleExpr = StyleExpr;
+                    Editable = false;
                 }
 
                 field("Type"; Rec."Type")
                 {
                     ToolTip = 'Specifies the value of the Type field.';
                     ApplicationArea = All;
+                    Editable = false;
 
                 }
                 field("No."; Rec."No.")
                 {
                     ToolTip = 'Specifies the value of the No. field.';
                     ApplicationArea = All;
+                    Editable = false;
                 }
                 field(Description; Rec.Description)
                 {
                     ToolTip = 'Specifies the value of the Description field.';
                     ApplicationArea = All;
+                    Editable = false;
                 }
 
                 field(Quantity; Rec.Quantity)
@@ -73,6 +73,7 @@ page 50101 "Sales Tree Orders"
                     ToolTip = 'Specifies the value of the Quantity field.';
                     ApplicationArea = All;
                     HideValue = not HideValues;
+                    Editable = false;
                 }
             }
         }
@@ -122,21 +123,13 @@ page 50101 "Sales Tree Orders"
         }
     }
 
-    trigger OnInit()
-    begin
-        Rec.DeleteAll();
-    end;
-
     trigger OnAfterGetRecord()
     begin
-        Indentation := Rec.Level;
-
-        case Indentation of
+        case Rec.Indentation of
             0:
                 begin
                     HideValues := false;
                     StyleExpr := 'Strong';
-
                 end;
             1:
                 begin
@@ -145,9 +138,21 @@ page 50101 "Sales Tree Orders"
         end;
     end;
 
+    trigger OnInit()
+    begin
+        LoadOrders();
+        Rec.FindFirst();
+    end;
+
+    procedure LoadOrders()
+    var
+        SalesTreePanelFunctions: Codeunit SalesTreePanelFunctions;
+    begin
+        SalesTreePanelFunctions.CreateOrderEntries(Rec);
+    end;
+
 
     var
-        Indentation: Integer;
         HideValues: Boolean;
         StyleExpr: Text;
 }

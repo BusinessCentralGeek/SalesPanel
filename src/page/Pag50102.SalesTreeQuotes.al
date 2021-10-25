@@ -4,7 +4,7 @@ page 50102 "Sales Tree Quotes"
     PageType = ListPart;
     SourceTable = "Sales Tree";
     UsageCategory = Lists;
-    SourceTableView = where("Document Type" = filter(Quote));
+    Editable = true;
 
     layout
     {
@@ -12,19 +12,15 @@ page 50102 "Sales Tree Quotes"
         {
             repeater(General)
             {
-                IndentationColumn = Indentation;
+                IndentationColumn = Rec.Indentation;
                 ShowAsTree = true;
-                field("Entry No."; Rec."Entry No.")
-                {
-                    ToolTip = 'Specifies the value of the Entry No. field.';
-                    ApplicationArea = All;
-                    Visible = false;
-                }
-                field(Level; Rec.Level)
+
+                field(Level; Rec.Indentation)
                 {
                     ToolTip = 'Specifies the value of the Level field.';
                     ApplicationArea = All;
                     Visible = false;
+                    Editable = false;
                 }
                 field("Document No."; Rec."Document No.")
                 {
@@ -32,6 +28,7 @@ page 50102 "Sales Tree Quotes"
                     ApplicationArea = All;
                     HideValue = HideValues;
                     StyleExpr = StyleExpr;
+                    Editable = false;
                 }
                 field("Sell-to Customer No."; Rec."Sell-to Customer No.")
                 {
@@ -39,33 +36,39 @@ page 50102 "Sales Tree Quotes"
                     ApplicationArea = All;
                     HideValue = HideValues;
                     StyleExpr = StyleExpr;
+                    Editable = false;
                 }
                 field("Date"; Rec."Date")
                 {
                     ToolTip = 'Specifies the value of the Date field.';
                     ApplicationArea = All;
                     StyleExpr = StyleExpr;
+                    Editable = false;
                 }
                 field("Type"; Rec."Type")
                 {
                     ToolTip = 'Specifies the value of the Type field.';
                     ApplicationArea = All;
+                    Editable = false;
                 }
                 field("No."; Rec."No.")
                 {
                     ToolTip = 'Specifies the value of the No. field.';
                     ApplicationArea = All;
+                    Editable = false;
                 }
                 field(Description; Rec.Description)
                 {
                     ToolTip = 'Specifies the value of the Description field.';
                     ApplicationArea = All;
+                    Editable = false;
                 }
                 field(Quantity; Rec.Quantity)
                 {
                     ToolTip = 'Specifies the value of the Quantity field.';
                     ApplicationArea = All;
                     HideValue = not HideValues;
+                    Editable = false;
                 }
             }
         }
@@ -115,21 +118,14 @@ page 50102 "Sales Tree Quotes"
     }
 
 
-    trigger OnInit()
-    begin
-        Rec.DeleteAll();
-    end;
 
     trigger OnAfterGetRecord()
     begin
-        Indentation := Rec.Level;
-
-        case Indentation of
+        case Rec.Indentation of
             0:
                 begin
                     HideValues := false;
                     StyleExpr := 'Strong';
-
                 end;
             1:
                 begin
@@ -138,8 +134,20 @@ page 50102 "Sales Tree Quotes"
         end;
     end;
 
+    trigger OnInit()
+    begin
+        LoadQuotes();
+        Rec.FindFirst();
+    end;
+
+    procedure LoadQuotes()
     var
-        Indentation: Integer;
+        SalesTreePanelFunctions: Codeunit SalesTreePanelFunctions;
+    begin
+        SalesTreePanelFunctions.CreateQuoteEntries(Rec);
+    end;
+
+    var
         HideValues: Boolean;
         StyleExpr: Text;
 }

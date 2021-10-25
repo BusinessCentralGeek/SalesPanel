@@ -3,7 +3,6 @@ page 50101 "Sales Tree Orders"
     Caption = 'Sales Orders';
     PageType = ListPart;
     SourceTable = "Sales Tree";
-    UsageCategory = Lists;
     Editable = true;
 
     layout
@@ -15,7 +14,7 @@ page 50101 "Sales Tree Orders"
                 IndentationColumn = Rec.Indentation;
                 ShowAsTree = true;
 
-                field(Level; Rec.Indentation)
+                field(Indentation; Rec.Indentation)
                 {
                     ToolTip = 'Specifies the value of the Level field.';
                     ApplicationArea = All;

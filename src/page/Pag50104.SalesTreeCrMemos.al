@@ -3,7 +3,6 @@ page 50104 "Sales Tree Cr. Memos"
     Caption = 'Sales Cr. Memos';
     PageType = ListPart;
     SourceTable = "Sales Tree";
-    UsageCategory = Lists;
     Editable = true;
 
     layout

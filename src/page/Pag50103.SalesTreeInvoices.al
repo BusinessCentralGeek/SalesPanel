@@ -3,7 +3,6 @@ page 50103 "Sales Tree Invoices"
     Caption = 'Sales Invoices';
     PageType = ListPart;
     SourceTable = "Sales Tree";
-    UsageCategory = Lists;
     Editable = true;
 
     layout

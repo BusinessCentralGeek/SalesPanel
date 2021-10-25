@@ -3,7 +3,6 @@ page 50102 "Sales Tree Quotes"
     Caption = 'Sales Quotes';
     PageType = ListPart;
     SourceTable = "Sales Tree";
-    UsageCategory = Lists;
     Editable = true;
 
     layout
